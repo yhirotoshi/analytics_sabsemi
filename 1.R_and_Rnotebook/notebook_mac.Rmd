@@ -1,0 +1,71 @@
+---
+title: "sabsemi 1st"
+output: html_notebook
+---
+
+```{r}
+### データの読み込み& いろいろ
+install.packages('dplyr', 'data.table', 'readr')
+library(dplyr)
+library(data.table)
+library(readr)
+
+log_data <- read.csv('../data/training.csv')
+# log_data <- read.csv('training.csv', fileEncoding = 'utf-8')
+```
+
+```{r}
+### 列の抽出
+AGE_LANK <- log_data$AGE_LANK
+sub <- subset(DD, select = c(USER_ID, GENDER, dayprice))
+### 行の抽出
+#sub <- subset(DD,X>300)
+#sub <- subset(DD,X<300,select=c(Unit,T))
+#sub <- subset(DD,X<300,select=Unit:Y)
+#sub <- subset(DD,X<300,select=1:3)
+#sub <- subset(DD,X<300,select=c(-Y,-X))
+#sub <- subset(DD,X<300,select=-c(3:4))
+
+
+### うざいのでここで作ったのは消しとく
+#rm(c(AGE_LANK, sub))
+```
+
+```{r}
+### 関数定義
+caldayshere <- function(dayamount, dayprice){
+	share = dayprice/dayamount
+	return(list(share = share,sales = dayprice))
+}
+
+day_amount <- log_data$dayamount
+day_price <- log_data$dayprice
+dayshare <- caldayshere(day_amount, day_price)
+
+```
+
+```{r}
+########################################################################
+sum_log <- log_data %>%
+  group_by(AGE_RANK) %>%
+  summarise(age_mean = mean(dayamount))
+########################################################################
+```
+
+```{r}
+### データプロット
+plot(log_data$dayamount, log_data$lastamount,xlab="日販",ylab="最終売り上げ",main="価格と販売数量")
+plot(sum_log$age_mean,type="l",xlab="age",ylab="sell avg",main="transition of selling")
+# barplot(sum_log$age_mean,xlab="age",ylab="sell avg",main="transition of selling")
+```
+
+```{r}
+### 分割配置
+matrix(c(1,2),2,1,byrow=TRUE)
+opar<- par(no.readonly = TRUE) 
+layout(matrix(c(1,2),2,1,byrow=TRUE))
+
+plot(log_data$dayamount, log_data$lastamount,xlab="sell by day",ylab="last sell",main="sell and amount")
+plot(sum_log$age_mean,type="l",xlab="age",ylab="sell avg",main="transition of selling")
+```
+
