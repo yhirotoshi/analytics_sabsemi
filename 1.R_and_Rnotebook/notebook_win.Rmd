@@ -4,21 +4,21 @@ output: html_notebook
 ---
 
 ```{r}
-### ƒf[ƒ^‚Ì“Ç‚İ‚İ& ‚¢‚ë‚¢‚ë
+### ?f?[?^?Ì“Ç‚İ???& ???ë‚¢??
 install.packages('dplyr', 'data.table', 'readr')
 library(dplyr)
 library(data.table)
 library(readr)
 
-log_data <- read.csv('../data/training.csv')
-# log_data <- read.csv('training.csv', fileEncoding = 'utf-8')
+log_data <- read.csv('data/training.csv')
+# log_data <- read.csv('data/training.csv', fileEncoding = 'utf-8')
 ```
 
 ```{r}
-### —ñ‚Ì’Šo
+### ???Ì’??o
 AGE_LANK <- log_data$AGE_LANK
 sub <- subset(DD, select = c(USER_ID, GENDER, dayprice))
-### s‚Ì’Šo
+### ?s?Ì’??o
 #sub <- subset(DD,X>300)
 #sub <- subset(DD,X<300,select=c(Unit,T))
 #sub <- subset(DD,X<300,select=Unit:Y)
@@ -27,12 +27,12 @@ sub <- subset(DD, select = c(USER_ID, GENDER, dayprice))
 #sub <- subset(DD,X<300,select=-c(3:4))
 
 
-### ‚¤‚´‚¢‚Ì‚Å‚±‚±‚Åì‚Á‚½‚Ì‚ÍÁ‚µ‚Æ‚­
+### ???????Ì‚Å‚????Å??ï¿½ï¿½??Ì‚Íï¿½ï¿½??Æ‚?
 #rm(c(AGE_LANK, sub))
 ```
 
 ```{r}
-### ŠÖ”’è‹`
+### ?Ö????`
 caldayshere <- function(dayamount, dayprice){
 	share = dayprice/dayamount
 	return(list(share = share,sales = dayprice))
@@ -53,14 +53,14 @@ sum_log <- log_data %>%
 ```
 
 ```{r}
-### ƒf[ƒ^ƒvƒƒbƒg
-plot(log_data$dayamount, log_data$lastamount,xlab="“ú”Ì",ylab="ÅI”„‚èã‚°",main="‰¿Ši‚Æ”Ì”„”—Ê")
+### ?f?[?^?v???b?g
+plot(log_data$dayamount, log_data$lastamount,xlab="????",ylab="?ÅI?????ã‚°",main="???i?Æ”Ì”?????")
 plot(sum_log$age_mean,type="l",xlab="age",ylab="sell avg",main="transition of selling")
 # barplot(sum_log$age_mean,xlab="age",ylab="sell avg",main="transition of selling")
 ```
 
 ```{r}
-### •ªŠ„”z’u
+### ?????z?u
 matrix(c(1,2),2,1,byrow=TRUE)
 opar<- par(no.readonly = TRUE) 
 layout(matrix(c(1,2),2,1,byrow=TRUE))
