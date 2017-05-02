@@ -1,0 +1,23 @@
+```{r}
+library(plotly)
+rownames(rock)<-c(
+  "X_japan",
+  "LUNA_SEA",
+  "UNISON_SQUARE_GARDEN",
+  "9mm_parabellum_bullet",
+  "GLAY",
+  "[Alexandros]",
+  "radwimps",
+  "ONE_OK_ROCK",
+  "back_number",
+  "sekai_no_owari",
+  "maximum_the_hormone",
+  "SiM",
+  "Fear.and_Loathing_in_Las_Vegas"
+)
+res1<-(factanal(rock[,-1], factors=3, scores="Bartlett", rotation="promax"))
+print(res1,digit=3)
+scores1<-as.data.frame(res1$scores)
+plot_ly(x=scores1$Factor1,y=scores1$Factor2,z=scores1$Factor3,type='scatter3d',symbol=rownames(rock))
+```
+

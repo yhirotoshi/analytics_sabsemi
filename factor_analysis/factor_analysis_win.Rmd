@@ -1,153 +1,96 @@
----
-title: "Factor analysis"
-output: html_notebook
----
 ```{r}
-### ”Xİ’è(Å‰‚¾‚¯)
-install.packages(c("psych", "rgl", "plotly"))
-```
-
-```{r}
-### ƒf[ƒ^“Ç‚İ‚İ
-dat <- read.csv(file('data/factor_analysis.csv',encoding="Shift_JIS"), header=TRUE)
-dat <- dat[,-1]
-colnames(dat)<-c("d‚¢","‘›‚ª‚µ‚¢","”M‚¢","d‚¢","‹­‚¢","–¾‚é‚¢","‰s‚¢","”ü‚µ‚¢","—Ç‚¢","“®‚¢‚Ä‚¢‚é","”hè‚È","–Ê”’‚¢","Ï‹É“I‚È")
-rownames(dat)<-c("‘N‚â‚©‚ÈÔ",
-                 "–¾‚é‚¢Ô",
-                 "ˆÃ‚¢Ô",
-                 "‚²‚­ˆÃ‚¢Ô",
-                 "‘N‚â‚©‚È???",
-                 "”–‚¢???",
-                 "‚­‚·‚ñ‚¾‰©",
-                 "‚²‚­ˆÃ‚¢‰©",
-                 "”Z‚¢—Î",
-                 "–¾‚é‚¢—Î",
-                 "ŠD‚İ‚Ì—Î",
-                 "‚²‚­ˆÃ‚¢—Î",
-                 "‘N‚â‚©‚È—Î‚İ‚ÌÂ",
-                 "–¾‚é‚¢—Î‚İ‚ÌÂ",
-                 "”Z‚¢—Î‚İ‚ÌÂ",
-                 "‚²‚­ˆÃ‚¢—Î‚İ‚ÌÂ",
-                 "”’",
-                 "ŠDF",
-                 "•"
+# ãƒ‡ãƒ¼ã‚¿èª­ã¿è¾¼ã¿ã„ã‚ã„ã‚
+file<-file.choose() # ãƒ‘ã‚¹ã§ã„ã‘ã‚‹ãªã‚‰ãã£ã¡ã§ãŠãƒ¼ã‘ãƒ¼
+dat <- read.csv(file)
+rock<-dat[,-1]
+colnames(rock)<-c(
+ "cool_music",
+ "cool_face",
+ "fassionable",
+ "popularity",
+ "karaoke",
+ "how_crazy",
+ "topicality"
 )
-
-```
-
-```{r}
-### ‹Lq“Œv
+rownames(rock)<-c(
+  "X_japan",
+  "LUNA_SEA",
+  "UNISON_SQUARE_GARDEN",
+  "9mm_parabellum_bullet",
+  "GLAY",
+  "[Alexandros]",
+  "radwimps",
+  "ONE_OK_ROCK",
+  "back_number",
+  "sekai_no_owari",
+  "maximum_the_hormone",
+  "SiM",
+  "Fear.and_Loathing_in_Las_Vegas"
+)
+# å…¥ã£ã¦ãªã‹ã£ãŸã‚‰â†“ã®ã‚³ãƒ¼ãƒ‰ã‚‚èª­ã¿è¾¼ã‚“ã§ãã ã•ã„
+#install.packages("psych")
 library(psych)
-as.data.frame(describe(dat))
-```
-
-```{r}
-### •Ï”ŠÔ‚Ì‘ŠŠÖŒW”‚ÌŠm”F
-# ‚»‚±‚Ü‚Å‹C‚É‚µ‚È‚¢‚Å—Ç‚¢
-as.data.frame(round(cor(dat),3)) # ‘ŠŠÖs—ñ
-
-```
-
-```{r}
-### ƒXƒNƒŠ[ƒvƒƒbƒg 
-## ŒÅ—L’l‚ª1ˆÈã‚Ü‚½‚ÍŠp“x‚ª‹}‚È•”•ª‚Ü‚Å‚ğˆöq‚Ì”‚É‚·‚é(¡‰ñ‚Í4‚ ‚½‚è)
-library(psych)
-pairs.panels(dat)
-VSS.scree(dat)
-
-```
-
-```{r}
-### ŒÅ—L’l‚ğŠm”F
-## ‚»‚±‚Ü‚Å‹C‚É‚µ‚È‚¢‚Å—Ç‚¢
-corx <- cor(dat)
-print("ŒÅ—L’l")
-eigen(corx)$values # ŒÅ—L’l
-
-## à–¾‚³‚ê‚½•ªU‚Ì%iŠñ—^—¦j
-print("Šñ—^—¦")
-eigen(corx)$values/sum(eigen(corx)$values)
-
-```
-
-```{r}
-### ˆöq•ªÍ
-efa <- factanal(dat, factors=3, scores="regression", rotation="promax")
-common <- 1-efa$uniqueness
-common
-print(efa, cutoff=0)
-
-
-# Uniqusness:•Ï”‚Ì“Æ©«
-# loading:ˆöq•‰‰×—Ê
-# Proportion Var:Šñ—^—¦
-# Cumulative Var:—İÏŠñ—^—¦
-# ˆöq•‰‰×—ÊFŠeŒ`—eŒ‚É‘Î‚·‚éˆöq‚ÌŒW”“I‚È‚â‚Â
-# ˆöq•ªÍ‚ğ‚·‚éƒR[ƒh‚É‚Ífa‚âfactanal‚ª‚ ‚é‚¯‚ÇAfa‚É‚Â‚¢‚Ä‚ÍÔ–{QÆ
-
-# •Û‘¶‚·‚éÛ‚ÍˆÈ‰º
-# write.csv(efa$loadings, "loadings.csv", row.names=T)
-
-```
-
-```{r}
-####ˆöq•‰‰×—Ê‚Ì–_ƒOƒ‰ƒt####
+describe(rock)
+#library(psych)
+pairs.panels(rock)
+VSS.scree(rock)
+# è¨ˆç®—æ–¹æ³•ãŒã„ãã¤ã‹ã‚ã‚‹ã‚“ã§ã™ãŒã€ä»Šå›ã¯å–ã‚Šåˆãˆãšbartlettã§
+res1<-(factanal(rock, factors=3, scores="Bartlett", rotation="promax"))
+print(res1,digit=3)
+scores1<-as.data.frame(res1$scores)
 oldpar<-par(no.readonly = TRUE)
-#par(mfrow = c(1,3))
-barplot(efa$loadings[,1], main="Factor1", ylim=c(-1,1))
-barplot(efa$loadings[,2], main="Factor2", ylim=c(-1,1))
-barplot(efa$loadings[,3], main="Factor3", ylim=c(-1,1))
+par(mfrow = c(1,3))
+barplot(res1$loadings[,1], main="Factor1", ylim=c(-1,1))
+barplot(res1$loadings[,2], main="Factor2", ylim=c(-1,1))
+barplot(res1$loadings[,3], main="Factor3", ylim=c(-1,1))
 par(oldpar)
-
-```
-
-```{r}
-### ˆöq•‰‰×—Ê‚Ìƒvƒƒbƒg
-plot(efa$loadings[,1:2], type="n", xlim=c(-1,1), ylim=c(-1,1))
-# arrows(0,0,efa$loadings[,1],efa$loadings[,2])
-# –îˆó‚ğ•\¦‚³‚¹‚½‚¯‚ê‚Î‚±‚ñ‚ÈŠ´‚¶‚ÌƒR[ƒh‚ğ“ü‚ê‚éi¡‰ñ‚ÍÈ—ªj
-text(efa$loadings[,1:2], colnames(dat))
+plot(res1$loadings[,1:2], type="n", xlim=c(-1,1), ylim=c(-1,1))
+text(res1$loadings[,1:2], colnames(rock))
 abline(v=0, lty=3)
 abline(h=0, lty=3)
-
-plot(efa$loadings[,2:3], type="n", xlim=c(-1,1), ylim=c(-1,1))
-text(efa$loadings[,2:3], colnames(dat))
+plot(res1$loadings[,2:3], type="n", xlim=c(-1,1), ylim=c(-1,1))
+text(res1$loadings[,2:3], colnames(rock))
 abline(v=0, lty=3)
 abline(h=0, lty=3)
-
-plot(efa$loadings[,-2], type="n", xlim=c(-1,1), ylim=c(-1,1))
-text(efa$loadings[,-2], colnames(dat))
+plot(res1$loadings[,-2], type="n", xlim=c(-1,1), ylim=c(-1,1))
+text(res1$loadings[,-2], colnames(rock))
 abline(v=0, lty=3)
 abline(h=0, lty=3)
 #par(oldpar)
-
-```
-
-```{r}
-### ˆöq“¾“_‚Ìƒvƒƒbƒg(F‚Ìƒ|ƒWƒVƒ‡ƒ“‚ÌŠm”F)
-plot(efa$scores[,1:2], type="n", xlim=c(-2.2,2.2), ylim=c(-2.2,2.2))
-text(efa$scores[,1:2], rownames(dat))
+# ã„ã‚ˆã„ã‚ˆ3Dã‚¿ã‚¤ãƒ ï¼ï¼
+#install.packages("rgl")
+library(rgl)
+#rgl.clear()
+plot3d(res1$loadings[,1:3], xlim=c(-1.2,1.2), ylim=c(-1.2,1.2), zlim=c(-1.2,1.2),col="blue")
+text3d(res1$loadings[,1:3], texts=colnames(rock))
+abclines3d(x=0, y=0, z=0, a=1, b=0, c=0)
+abclines3d(x=0, y=0, z=0, a=0, b=1, c=0)
+abclines3d(x=0, y=0, z=0, a=0, b=0, c=1)
+# è‰²ã¯é’ãã—ãŸã‚“ã§ã™ã‘ã©ã€ã€ã€å¿ƒã®ç›®ã§ã¿ã¦ãã ã•ã„ã­m(_ _)m
+##ä¿å­˜ç”¨
+#rgl.snapshot("filename.png") 
+# å› å­å¾—ç‚¹ï¼ˆãƒ–ãƒ©ãƒ³ãƒ‰ã®æ–¹ã‚’å…±é€šå› å­ã§èª¬æ˜ã™ã‚‹ï¼‰â†’ã„ã‚ã‚†ã‚‹ã²ã¨ã¤ã®çŸ¥è¦šãƒãƒƒãƒ—
+plot(scores1[,-1], type="n", xlim=c(-2.2,2.2), ylim=c(-2.2,2.2))
+text(scores1[,-1], rownames(rock))
 abline(v=0, lty=3)
 abline(h=0, lty=3)
 par(oldpar)
-
-plot(efa$scores[,2:3], type="n", xlim=c(-2.2,2.2), ylim=c(-2.2,2.2))
-text(efa$scores[,2:3], rownames(dat))
+plot(scores1[,-2], type="n", xlim=c(-2.2,2.2), ylim=c(-2.2,2.2))
+text(scores1[,-2], rownames(rock))
 abline(v=0, lty=3)
 abline(h=0, lty=3)
 par(oldpar)
-
-plot(efa$scores[,-2], type="n", xlim=c(-2.2,2.2), ylim=c(-2.2,2.2))
-text(efa$scores[,-2], rownames(dat))
+plot(scores1[,-3], type="n", xlim=c(-2.2,2.2), ylim=c(-2.2,2.2))
+text(scores1[,-3], rownames(rock))
 abline(v=0, lty=3)
 abline(h=0, lty=3)
 par(oldpar)
+#(é€£ç¶šã§ãƒ—ãƒ­ãƒƒãƒˆã—ã¦ã‚‹ãªã‚‰)å‰å›ã®3Dãƒ—ãƒ­ãƒƒãƒˆã‚’ã‚¯ãƒªã‚¢
+rgl.clear()
+plot3d(scores1, xlim=c(-2.2,2.2), ylim=c(-2.2,2.2), zlim=c(-2.2,2.2))
+text3d(scores1, texts=rownames(rock))
+abclines3d(x=0, y=0, z=0, a=1, b=0, c=0)
+abclines3d(x=0, y=0, z=0, a=0, b=1, c=0)
+abclines3d(x=0, y=0, z=0, a=0, b=0, c=1)
 ```
-
-```{r}
-# •`‰æ
-library(plotly)
-plot_ly(x = as.data.frame(efa$score)$Factor1, y = as.data.frame(efa$score)$Factor2, z = as.data.frame(efa$score)$Factor3,type = 'scatter3d', symbol = rownames(dat))
-```
-
 
