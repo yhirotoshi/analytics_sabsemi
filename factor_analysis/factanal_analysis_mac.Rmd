@@ -1,5 +1,6 @@
 ```{r}
 library(plotly)
+library(psych)
 rownames(rock)<-c(
   "X_japan",
   "LUNA_SEA",
