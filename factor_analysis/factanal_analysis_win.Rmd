@@ -1,6 +1,6 @@
 ```{r}
-# データ読み込みいろいろ
-file<-file.choose() # パスでいけるならそっちでおーけー
+# �f�[�^�ǂݍ��݂��낢��
+file<-file.choose() # �p�X�ł�����Ȃ炻�����ł��[���[
 dat <- read.csv(file)
 rock<-dat[,-1]
 colnames(rock)<-c(
@@ -27,14 +27,14 @@ rownames(rock)<-c(
   "SiM",
   "Fear.and_Loathing_in_Las_Vegas"
 )
-# 入ってなかったら↓のコードも読み込んでください
+# �����ĂȂ������火�̃R�[�h���ǂݍ���ł�������
 #install.packages("psych")
 library(psych)
 describe(rock)
 #library(psych)
 pairs.panels(rock)
 VSS.scree(rock)
-# 計算方法がいくつかあるんですが、今回は取り合えずbartlettで
+# �v�Z���@�������������ł����A����͎�荇����bartlett��
 res1<-(factanal(rock, factors=3, scores="Bartlett", rotation="promax"))
 print(res1,digit=3)
 scores1<-as.data.frame(res1$scores)
@@ -57,7 +57,7 @@ text(res1$loadings[,-2], colnames(rock))
 abline(v=0, lty=3)
 abline(h=0, lty=3)
 #par(oldpar)
-# いよいよ3Dタイム！！
+# ���悢��3D�^�C���I�I
 #install.packages("rgl")
 library(rgl)
 #rgl.clear()
@@ -66,10 +66,10 @@ text3d(res1$loadings[,1:3], texts=colnames(rock))
 abclines3d(x=0, y=0, z=0, a=1, b=0, c=0)
 abclines3d(x=0, y=0, z=0, a=0, b=1, c=0)
 abclines3d(x=0, y=0, z=0, a=0, b=0, c=1)
-# 色は青くしたんですけど、、、心の目でみてくださいねm(_ _)m
-##保存用
+# �F�͐�������ł����ǁA�A�A�S�̖ڂł݂Ă���������m(_ _)m
+##�ۑ��p
 #rgl.snapshot("filename.png") 
-# 因子得点（ブランドの方を共通因子で説明する）→いわゆるひとつの知覚マップ
+# ���q���_�i�u�����h�̕������ʈ��q�Ő�������j��������ЂƂ̒m�o�}�b�v
 plot(scores1[,-1], type="n", xlim=c(-2.2,2.2), ylim=c(-2.2,2.2))
 text(scores1[,-1], rownames(rock))
 abline(v=0, lty=3)
@@ -85,7 +85,7 @@ text(scores1[,-3], rownames(rock))
 abline(v=0, lty=3)
 abline(h=0, lty=3)
 par(oldpar)
-#(連続でプロットしてるなら)前回の3Dプロットをクリア
+#(�A���Ńv���b�g���Ă�Ȃ�)�O���3D�v���b�g���N���A
 rgl.clear()
 plot3d(scores1, xlim=c(-2.2,2.2), ylim=c(-2.2,2.2), zlim=c(-2.2,2.2))
 text3d(scores1, texts=rownames(rock))
